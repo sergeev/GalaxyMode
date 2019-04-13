@@ -17,6 +17,11 @@
 		D84CAD81226226C900BEC554 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D84CAD7F226226C900BEC554 /* LaunchScreen.storyboard */; };
 		D84CAD8C226226CA00BEC554 /* GalaxyModeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D84CAD8B226226CA00BEC554 /* GalaxyModeTests.swift */; };
 		D84CAD97226226CA00BEC554 /* GalaxyModeUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D84CAD96226226CA00BEC554 /* GalaxyModeUITests.swift */; };
+		D84CADA62262297E00BEC554 /* vzriv.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = D84CADA42262297E00BEC554 /* vzriv.mp3 */; };
+		D84CADA72262297E00BEC554 /* bullet.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = D84CADA52262297E00BEC554 /* bullet.mp3 */; };
+		D84CADAB22622A2700BEC554 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D84CADA922622A2700BEC554 /* Assets.xcassets */; };
+		D84E6BE2226252EC009A3A47 /* Starfield.sks in Resources */ = {isa = PBXBuildFile; fileRef = D84E6BE0226252EC009A3A47 /* Starfield.sks */; };
+		D84E6BE3226252EC009A3A47 /* Vzriv.sks in Resources */ = {isa = PBXBuildFile; fileRef = D84E6BE1226252EC009A3A47 /* Vzriv.sks */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -53,6 +58,11 @@
 		D84CAD92226226CA00BEC554 /* GalaxyModeUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GalaxyModeUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		D84CAD96226226CA00BEC554 /* GalaxyModeUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GalaxyModeUITests.swift; sourceTree = "<group>"; };
 		D84CAD98226226CA00BEC554 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		D84CADA42262297E00BEC554 /* vzriv.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = vzriv.mp3; sourceTree = "<group>"; };
+		D84CADA52262297E00BEC554 /* bullet.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = bullet.mp3; sourceTree = "<group>"; };
+		D84CADA922622A2700BEC554 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Assets.xcassets; path = ../Assets.xcassets; sourceTree = "<group>"; };
+		D84E6BE0226252EC009A3A47 /* Starfield.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = Starfield.sks; sourceTree = "<group>"; };
+		D84E6BE1226252EC009A3A47 /* Vzriv.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = Vzriv.sks; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -103,6 +113,11 @@
 		D84CAD6F226226C800BEC554 /* GalaxyMode */ = {
 			isa = PBXGroup;
 			children = (
+				D84E6BE0226252EC009A3A47 /* Starfield.sks */,
+				D84E6BE1226252EC009A3A47 /* Vzriv.sks */,
+				D84CADA922622A2700BEC554 /* Assets.xcassets */,
+				D84CADA52262297E00BEC554 /* bullet.mp3 */,
+				D84CADA42262297E00BEC554 /* vzriv.mp3 */,
 				D84CAD70226226C800BEC554 /* AppDelegate.swift */,
 				D84CAD72226226C800BEC554 /* GameScene.sks */,
 				D84CAD74226226C800BEC554 /* Actions.sks */,
@@ -238,11 +253,16 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D84CADA72262297E00BEC554 /* bullet.mp3 in Resources */,
+				D84CADA62262297E00BEC554 /* vzriv.mp3 in Resources */,
 				D84CAD7C226226C800BEC554 /* Main.storyboard in Resources */,
 				D84CAD73226226C800BEC554 /* GameScene.sks in Resources */,
 				D84CAD7E226226C900BEC554 /* Assets.xcassets in Resources */,
 				D84CAD81226226C900BEC554 /* LaunchScreen.storyboard in Resources */,
+				D84E6BE2226252EC009A3A47 /* Starfield.sks in Resources */,
 				D84CAD75226226C800BEC554 /* Actions.sks in Resources */,
+				D84CADAB22622A2700BEC554 /* Assets.xcassets in Resources */,
+				D84E6BE3226252EC009A3A47 /* Vzriv.sks in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

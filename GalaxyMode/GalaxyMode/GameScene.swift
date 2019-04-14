@@ -8,6 +8,8 @@
 
 import SpriteKit
 import GameplayKit
+// Добавляем библиотеку управления игроком через героскоп
+import CoreMotion
 
 class GameScene: SKScene, SKPhysicsContactDelegate {
     
@@ -24,6 +26,22 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             scoreLabel.text = "Счет: \(score)"
         }
     }
+    
+    // Добавляем переменную Time(таймер)
+    // Нужна для создания врагов
+    var gameTimer:Timer!
+    
+    // Добавляем врагов, выбираем кратинки из Assets.xcassets
+    var enemis = ["alien", "alien2", "alien3"]
+    
+    // создаем уникальные идентификаторы для врагов
+    let enemiCategory:UInt32 = 0x1 << 1
+    // Создаем уникальные идентификаторы для пуль игрока
+    let bulletCategory:UInt32 = 0x1 << 0
+    // Обазаначем переменную для управления кораблем игрока в игре
+    let motionManager = CMMotionManager()
+    // Обазначаем для акселерометра 0
+    var xAccelerate:CGFloat = 0
     
     override func didMove(to view: SKView) {
         // создаем переменную анимации заднего поля(звезд)
@@ -44,6 +62,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         player.position = CGPoint(x: 0, y: -200)
         
         self.addChild(player)
+        
+        // Увеличим размеры игрока, в два (2) раза
+        player.setScale(2)
         
         // добавление физики
         // отключаем отключаем гравитацию
@@ -66,7 +87,166 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         score = 0
         // Добавляем scoreLaberl на экран
         self.addChild(scoreLabel)
+        
+        // Вызываем функцию и добавляем врага
+        //          время появления                цель - себя   селектор отдельный объект      ниформация - нет  повторяющееся действие ? - да (true)
+        gameTimer = Timer.scheduledTimer(timeInterval: 0.75, target: self, selector: #selector(addEnemi), userInfo: nil, repeats: true)
+        
+        // Время обновления
+        motionManager.accelerometerUpdateInterval = 0.2
+        // Добавляем параметры для обновления
+        // Шаблонный метод для управления акселерометором на iPhone, для iPad нужно переработать
+        motionManager.startAccelerometerUpdates(to: OperationQueue.current!) { (data:CMAccelerometerData?, error: Error?) in
+            if let accelerometerData = data {
+                let acceleration = accelerometerData.acceleration
+                // Плавное передвижение игрока на экране
+                self.xAccelerate = CGFloat(acceleration.x) * 0.75 + self.xAccelerate * 0.25
+            }
         }
+        }
+    
+    // Создаем функцию для вращения нашего играка, использовали для этого расчеты из motionManager.startAccelerometerUpdates
+    override func didSimulatePhysics() {
+        // добавляем скорость перемещения  игрока по экрану
+        player.position.x += xAccelerate * 50
+        // Создаем условия для перемещения игрока за рамками игры
+        if player.position.x < -350 {
+            // Создаем эффект появления игрока с другой стороны экрана, красивый эффект :)
+            player.position = CGPoint(x: 350, y: player.position.y)
+        } else if player.position.x > 350 {
+            // ТОжем самое, если игроко полетит в другую сторону
+            player.position = CGPoint(x: -350, y: player.position.y)
+        }
+    }
+    // Создаем функцию соприкосновения и отслеживания событий
+    func didBegin(_ contact: SKPhysicsContact) {
+        var enemiBody:SKPhysicsBody
+        var bulletBody:SKPhysicsBody
+        
+        // Создаем проверу
+        if contact.bodyA.categoryBitMask < contact.bodyB.categoryBitMask {
+            bulletBody  = contact.bodyA
+            enemiBody   = contact.bodyB
+        } else {
+            bulletBody  = contact.bodyB
+            enemiBody   = contact.bodyA
+        }
+        
+        // Проверка на соприкосновение
+        if (enemiBody.categoryBitMask & enemiCategory) != 0 && (bulletBody.categoryBitMask & bulletCategory) != 0 {
+            collisionElements(bulletNode: bulletBody.node as! SKSpriteNode, enemiNode: enemiBody.node as! SKSpriteNode)
+        }
+    }
+    
+    // Элименты столкнулись, проигрываем ситуацию
+    func collisionElements(bulletNode:SKSpriteNode, enemiNode:SKSpriteNode) {
+        let explosion = SKEmitterNode(fileNamed: "Vzriv")
+        // Создаем где должен произойти взрыв, в ншем случае это на месте врага
+        explosion?.position = enemiNode.position
+        self.addChild(explosion!)
+        
+        // Добавляем звук
+        self.run(SKAction.playSoundFileNamed("vzriv.mp3", waitForCompletion: false))
+        
+        // После взрыва удаляем все объекты - пулю и врага
+        bulletNode.removeFromParent()
+        enemiNode.removeFromParent()
+        
+        // Делаем задержку для анимации
+        self.run(SKAction.wait(forDuration: 2)) {
+            explosion?.removeFromParent()
+        }
+        
+        // добавляем баллы за уничтожение врагов
+        score += 5
+    }
+    
+    @objc func addEnemi() {
+        // Добавляем случайного врага из трех вариантов
+        enemis = GKRandomSource.sharedRandom().arrayByShufflingObjects(in: enemis) as! [String]
+        
+        // Создаем картинку врага на экране
+        let enemi = SKSpriteNode(imageNamed: enemis[0])
+        // Создаем коордианты появления врагов
+        let randomPos = GKRandomDistribution(lowestValue: -350, highestValue: 350)
+        // Конвертируем все в CGFloat
+        let pos = CGFloat(randomPos.nextInt())
+        
+        // создаем противника за экраном
+        enemi.position = CGPoint(x: pos, y: 700)
+        
+        // Увеличим размеры наших врагов, в два (2) раза
+        enemi.setScale(2)
+        
+        // Добавляем физику для врагов, попаданя в них и т.д
+        //                                             указываем физический размер врага
+        enemi.physicsBody = SKPhysicsBody(rectangleOf: enemi.size)
+        // Остлеживаем соприкосновения
+        enemi.physicsBody?.isDynamic = true
+        
+        enemi.physicsBody?.categoryBitMask = enemiCategory
+        enemi.physicsBody?.contactTestBitMask = bulletCategory
+        enemi.physicsBody?.collisionBitMask = 0
+        
+        self.addChild(enemi)
+        
+        // Добавляем скорость появления врагов
+        let animationDuration:TimeInterval = 6
+        
+        // Удаляем врагов ушедших за игравой экран
+        var actions = [SKAction]()
+        actions.append(SKAction.move(to: CGPoint(x: pos, y: -800), duration: animationDuration))
+        // Удаляем объект
+        actions.append(SKAction.removeFromParent())
+        
+        // какой массив будем проигрыать - actions
+        enemi.run(SKAction.sequence(actions))
+    }
+    
+    // Создаем функцию нажатия на экран и вызываем выстрел функцию fireBulle()
+    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+        fireBulle()
+    }
+    
+    // Создаем функцию игровой пули от игрока
+    func fireBulle() {
+        // Создаем звук, просто звук далее ничего не выполняем - waitForCompletion: false
+        self.run(SKAction.playSoundFileNamed("vzriv.mp3", waitForCompletion: false))
+        
+        // Вызываем изображение нашей пули
+        let bullet = SKSpriteNode(imageNamed: "torpedo")
+        // Создаем выстрел из позиции игрока, привязываем к модели игрока
+        bullet.position = player.position
+        // Выстрел появляется чуть выше игрока
+        bullet.position.y += 5
+        
+        // Добавляем физику для пули, попаданя в них и т.д
+        //                                             указываем физический размер пули, в нашем случае это круг - circleOfRadius
+        bullet.physicsBody = SKPhysicsBody(circleOfRadius: bullet.size.width / 2)
+        // Остлеживаем соприкосновения
+        bullet.physicsBody?.isDynamic = true
+        
+        // Указываем что пуля попадает по врагам bulletCategory => enemiCategory
+        bullet.physicsBody?.categoryBitMask = bulletCategory
+        bullet.physicsBody?.contactTestBitMask = enemiCategory
+        bullet.physicsBody?.collisionBitMask = 0
+        // Отслеживаем выстрел, соприкосновения с другим объектом, указываем как true(да)
+        bullet.physicsBody?.usesPreciseCollisionDetection = true
+        
+        self.addChild(bullet)
+        
+        // Добавляем скорость полета пули
+        let animationDuration:TimeInterval = 0.3
+        
+        // Удаляем пулю ушедшую за игравой экран
+        var actions = [SKAction]()
+        actions.append(SKAction.move(to: CGPoint(x: player.position.x, y: 800), duration: animationDuration))
+        // Удаляем пулю
+        actions.append(SKAction.removeFromParent())
+        
+        // какой массив будем проигрыать - actions
+        bullet.run(SKAction.sequence(actions))
+    }
     
     override func update(_ currentTime: TimeInterval) {
         // Called before each frame is rendered

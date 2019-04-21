@@ -58,13 +58,14 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         // добавляем игрока
         player = SKSpriteNode(imageNamed: "shuttle")
-        // указываем позицию игрока X: 0 - нулевая позиция экрана, Y: -300 - опущен на -300 по отношению к верхнему экрану
-        player.position = CGPoint(x: 0, y: -200)
+        // Делаем адаптивное расположение нашего игрока по центру + 40 px от низа Y
+        player.position = CGPoint(x: UIScreen.main.bounds.width / 2, y: 40)
         
         self.addChild(player)
         
+        // Не актуально из за CGPoint(x: UIScreen.main.bounds.width / 2, y: 40) - адаптивный дизайн
         // Увеличим размеры игрока, в два (2) раза
-        player.setScale(2)
+        //player.setScale(2)
         
         // добавление физики
         // отключаем отключаем гравитацию
@@ -82,7 +83,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         scoreLabel.fontColor = UIColor.white
         // устанавливаем позицию текста, берем выстоту и ширину экрана self.frame.size.height и отнимаем 60
         //scoreLabel.position = CGPoint(x: -200, y: self.frame.size.height - 100)
-        scoreLabel.position = CGPoint(x: -300, y: 625)
+        //scoreLabel.position = CGPoint(x: -300, y: 625)
+        // Aдаптивный дизайн
+        scoreLabel.position = CGPoint(x: 100, y: UIScreen.main.bounds.height - 50)
+        
         // обознаваем score как 0 при старте игры
         score = 0
         // Добавляем scoreLaberl на экран
@@ -110,12 +114,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         // добавляем скорость перемещения  игрока по экрану
         player.position.x += xAccelerate * 50
         // Создаем условия для перемещения игрока за рамками игры
-        if player.position.x < -350 {
+        if player.position.x < 0 {
             // Создаем эффект появления игрока с другой стороны экрана, красивый эффект :)
-            player.position = CGPoint(x: 350, y: player.position.y)
-        } else if player.position.x > 350 {
+            player.position = CGPoint(x: UIScreen.main.bounds.height - player.size.width, y: player.position.y)
+        } else if player.position.x > UIScreen.main.bounds.width {
             // ТОжем самое, если игроко полетит в другую сторону
-            player.position = CGPoint(x: -350, y: player.position.y)
+            player.position = CGPoint(x: 20, y: player.position.y)
         }
     }
     // Создаем функцию соприкосновения и отслеживания событий
@@ -168,15 +172,16 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         // Создаем картинку врага на экране
         let enemi = SKSpriteNode(imageNamed: enemis[0])
         // Создаем коордианты появления врагов
-        let randomPos = GKRandomDistribution(lowestValue: -350, highestValue: 350)
+        let randomPos = GKRandomDistribution(lowestValue: 20, highestValue: Int(UIScreen.main.bounds.size.width - 20))
         // Конвертируем все в CGFloat
         let pos = CGFloat(randomPos.nextInt())
         
-        // создаем противника за экраном
-        enemi.position = CGPoint(x: pos, y: 700)
+        // создаем противника за экраном - реализовываем адаптив
+        enemi.position = CGPoint(x: pos, y: UIScreen.main.bounds.size.height + enemi.size.height)
         
+        /// Не актуально из за CGPoint(x: UIScreen.main.bounds.width / 2, y: 40) - адаптивный дизайн
         // Увеличим размеры наших врагов, в два (2) раза
-        enemi.setScale(2)
+        //enemi.setScale(2)
         
         // Добавляем физику для врагов, попаданя в них и т.д
         //                                             указываем физический размер врага
@@ -195,7 +200,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         // Удаляем врагов ушедших за игравой экран
         var actions = [SKAction]()
-        actions.append(SKAction.move(to: CGPoint(x: pos, y: -800), duration: animationDuration))
+        // Отнимаем высоту от экрана врага 0 - enemi.size.height
+        actions.append(SKAction.move(to: CGPoint(x: pos, y: 0 - enemi.size.height), duration: animationDuration))
         // Удаляем объект
         actions.append(SKAction.removeFromParent())
         
@@ -240,7 +246,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         // Удаляем пулю ушедшую за игравой экран
         var actions = [SKAction]()
-        actions.append(SKAction.move(to: CGPoint(x: player.position.x, y: 800), duration: animationDuration))
+        actions.append(SKAction.move(to: CGPoint(x: player.position.x, y: UIScreen.main.bounds.height + bullet.size.height), duration: animationDuration))
         // Удаляем пулю
         actions.append(SKAction.removeFromParent())
         

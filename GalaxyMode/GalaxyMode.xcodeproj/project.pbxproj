@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D834B43D226C28A5006D22D8 /* GameMainMenu.sks in Resources */ = {isa = PBXBuildFile; fileRef = D834B43C226C28A5006D22D8 /* GameMainMenu.sks */; };
+		D844E44C2263330800EF49AB /* GameMainMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = D844E44B2263330800EF49AB /* GameMainMenu.swift */; };
 		D84CAD71226226C800BEC554 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D84CAD70226226C800BEC554 /* AppDelegate.swift */; };
 		D84CAD73226226C800BEC554 /* GameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = D84CAD72226226C800BEC554 /* GameScene.sks */; };
 		D84CAD75226226C800BEC554 /* Actions.sks in Resources */ = {isa = PBXBuildFile; fileRef = D84CAD74226226C800BEC554 /* Actions.sks */; };
@@ -42,6 +44,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		D834B43C226C28A5006D22D8 /* GameMainMenu.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = GameMainMenu.sks; sourceTree = "<group>"; };
+		D844E44B2263330800EF49AB /* GameMainMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameMainMenu.swift; sourceTree = "<group>"; };
 		D84CAD6D226226C800BEC554 /* GalaxyMode.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GalaxyMode.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D84CAD70226226C800BEC554 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		D84CAD72226226C800BEC554 /* GameScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = GameScene.sks; sourceTree = "<group>"; };
@@ -120,8 +124,10 @@
 				D84CADA42262297E00BEC554 /* vzriv.mp3 */,
 				D84CAD70226226C800BEC554 /* AppDelegate.swift */,
 				D84CAD72226226C800BEC554 /* GameScene.sks */,
+				D834B43C226C28A5006D22D8 /* GameMainMenu.sks */,
 				D84CAD74226226C800BEC554 /* Actions.sks */,
 				D84CAD76226226C800BEC554 /* GameScene.swift */,
+				D844E44B2263330800EF49AB /* GameMainMenu.swift */,
 				D84CAD78226226C800BEC554 /* GameViewController.swift */,
 				D84CAD7A226226C800BEC554 /* Main.storyboard */,
 				D84CAD7D226226C900BEC554 /* Assets.xcassets */,
@@ -253,6 +259,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D834B43D226C28A5006D22D8 /* GameMainMenu.sks in Resources */,
 				D84CADA72262297E00BEC554 /* bullet.mp3 in Resources */,
 				D84CADA62262297E00BEC554 /* vzriv.mp3 in Resources */,
 				D84CAD7C226226C800BEC554 /* Main.storyboard in Resources */,
@@ -288,6 +295,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D84CAD77226226C800BEC554 /* GameScene.swift in Sources */,
+				D844E44C2263330800EF49AB /* GameMainMenu.swift in Sources */,
 				D84CAD79226226C800BEC554 /* GameViewController.swift in Sources */,
 				D84CAD71226226C800BEC554 /* AppDelegate.swift in Sources */,
 			);

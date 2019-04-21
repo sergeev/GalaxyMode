@@ -18,6 +18,7 @@ class GameMainMenu: SKScene {
     
     // Добавляем +10 секунд для сцены меню
     override func didMove(to view: SKView) {
+        
         // Обращаемся
         starfield = self.childNode(withName: "starfieldMenu") as? SKEmitterNode
         // Ставим анимацию в меню начиная с 10 секунд
@@ -28,6 +29,14 @@ class GameMainMenu: SKScene {
         //newGameBtnNode.texture = SKTexture("название картинки")
         levelBtnNode = self.childNode(withName: "proff") as? SKSpriteNode
         //levelBtnNode = self.childNode(withName: "proff") as? SKSpriteNode
+        
+        // При перезаходе сохраняем текст для игрока
+        let userLevel = UserDefaults.standard
+        if userLevel.bool(forKey: "hard") {
+            labelLevelNode.text = "Профи"
+        } //else {
+            //labelLevelNode.text = "Новичок"
+        //}
     }
     
     // Отслеживаем нажатие пользователя на экране
@@ -43,8 +52,26 @@ class GameMainMenu: SKScene {
                 // Создаем адаптивный дизайн игры
                 let gameScene = GameScene(size: UIScreen.main.bounds.size)
                 self.view?.presentScene(gameScene, transition: transition)
+                // Проверяем уровень игры, если выбран не junior то создаем инсту для proff
+            } else if nodesArray.first?.name == "junior" {
+                // обращаемся к функции
+                changeLevel()
             }
         }
     }
     
+    func changeLevel() {
+        // Создаем переменную которая сохраняется в ячейки памяти устройства
+        let userLevel = UserDefaults.standard
+        
+        if labelLevelNode.text == "Новичок" {
+            labelLevelNode.text = "Профи"
+            userLevel.set(true, forKey: "hard")
+        } else {
+            labelLevelNode.text = "Новичок"
+            userLevel.set(false, forKey: "hard")
+        }
+        // Создаем синхронизацию для всех уровней
+        userLevel.synchronize()
+    }
 }

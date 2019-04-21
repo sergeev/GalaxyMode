@@ -92,9 +92,16 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         // Добавляем scoreLaberl на экран
         self.addChild(scoreLabel)
         
+        // Добавляем уровень сложности в игру
+        var timeInterval = 0.75
+        
+        if UserDefaults.standard.bool(forKey: "hard") {
+            timeInterval = 0.3
+        }
+        
         // Вызываем функцию и добавляем врага
         //          время появления                цель - себя   селектор отдельный объект      ниформация - нет  повторяющееся действие ? - да (true)
-        gameTimer = Timer.scheduledTimer(timeInterval: 0.75, target: self, selector: #selector(addEnemi), userInfo: nil, repeats: true)
+        gameTimer = Timer.scheduledTimer(timeInterval: timeInterval, target: self, selector: #selector(addEnemi), userInfo: nil, repeats: true)
         
         // Время обновления
         motionManager.accelerometerUpdateInterval = 0.2
